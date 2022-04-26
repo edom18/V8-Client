@@ -1,0 +1,3 @@
+﻿  v8client.cpp
+d:\mydesktop\c++projects\v8client\v8client\v8client.cpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  v8client.vcxproj -> D:\MyDesktop\C++Projects\v8client\x64\Debug\v8client.exe
