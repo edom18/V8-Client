@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,14 +14,26 @@
 #include "include/v8.h"
 #include "include/libplatform/libplatform.h"
 
+void ReadFile(const char* filePath, std::string& contents)
+{
+    std::ifstream f(filePath);
+    std::stringstream buffer;
+
+    buffer << f.rdbuf();
+
+    contents = buffer.str();
+}
+
 int main(int argc, char* argv[])
 {
     std::cout << "Hello World!\n";
 
     const char* filePath = "test.js";
+    std::string fileContents;
+    ReadFile(filePath, fileContents);
 
-    v8::V8::InitializeICUDefaultLocation(filePath);
-    v8::V8::InitializeExternalStartupData(filePath);
+    v8::V8::InitializeICUDefaultLocation(argv[0]);
+    v8::V8::InitializeExternalStartupData(argv[0]);
 
     std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
     v8::V8::InitializePlatform(platform.get());
@@ -44,7 +59,8 @@ int main(int argc, char* argv[])
 
         {
             // Create a string containing the JavaScript source code.
-            v8::Local<v8::String> source = v8::String::NewFromUtf8(isolate, "'Hello' + ', V8 World!'");
+            //v8::Local<v8::String> source = v8::String::NewFromUtf8(isolate, "'Hello' + ', V8 World!'");
+            v8::Local<v8::String> source = v8::String::NewFromUtf8(isolate, fileContents.c_str());
 
             // Compile the source code.
             v8::Local<v8::Script> script = v8::Script::Compile(context, source).ToLocalChecked();
