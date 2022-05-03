@@ -12,6 +12,7 @@
 #include "include/libplatform/libplatform.h"
 
 #include "testclass.h"
+#include "bindtest.h"
 
 v8::Global<v8::FunctionTemplate> func_;
 v8::Global<v8::FunctionTemplate> js_func_;
@@ -72,29 +73,19 @@ int main(int argc, char* argv[])
         // Create a stack-allocated handle scope.
         v8::HandleScope handle_scope(isolate);
 
-        // Create a new context.
+        // Create a global object.
         v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
-        //v8::Handle<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
+
+        // Assign "log" function to the global object.
         global->Set(isolate, "log", v8::FunctionTemplate::New(isolate, LogCallback));
         global->Set(v8::String::NewFromUtf8(isolate, "version").ToLocalChecked(), v8::Number::New(isolate, 1.1), v8::ReadOnly);
 
-        v8::Local<v8::FunctionTemplate> function_t = v8::FunctionTemplate::New(isolate);
-        function_t->SetClassName(v8::String::NewFromUtf8(isolate, "Edo").ToLocalChecked());
-        v8::Local<v8::ObjectTemplate> instance_t = function_t->InstanceTemplate();
-        instance_t->SetInternalFieldCount(1);
-        function_t->PrototypeTemplate()->Set(isolate, "doSomething", v8::FunctionTemplate::New(isolate, LogCallback));
-        global->Set(v8::String::NewFromUtf8(isolate, "Edo").ToLocalChecked(), instance_t, v8::ReadOnly);
+        // Bind a C++ class to V8 side.
+        v8::Local<v8::FunctionTemplate> constructor = v8::FunctionTemplate::New(isolate, JSBindTest::construct);
+        constructor->InstanceTemplate()->SetInternalFieldCount(1);
+        constructor->InstanceTemplate()->SetAccessor(v8::String::NewFromUtf8(isolate, "age").ToLocalChecked(), JSBindTest::get, JSBindTest::set);
 
-        //v8::Local<v8::FunctionTemplate> ctor_t = v8::FunctionTemplate::New(isolate, JSEdo::ConstructorHandler);
-        v8::Local<v8::ObjectTemplate> klass_t = v8::ObjectTemplate::New(isolate);
-        klass_t->SetCallAsFunctionHandler(JSEdo::ConstructorHandler);
-        global->Set(v8::String::NewFromUtf8(isolate, "JSEdo").ToLocalChecked(), klass_t, v8::ReadOnly);
-
-        // Global C++ Objects
-        //Greeter* greeter;
-
-        // Add Greeter to Global prototype
-        //greeter = new Greeter();
+        global->Set(v8::String::NewFromUtf8(isolate, "JSBindTest").ToLocalChecked(), constructor, v8::ReadOnly);
 
         v8::Local<v8::Context> context = v8::Context::New(isolate, NULL, global);
 

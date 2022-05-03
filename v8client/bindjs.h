@@ -16,11 +16,6 @@ public:
         instance_tmpl_->SetAccessor(v8::String::NewFromUtf8(NULL, "age").ToLocalChecked(), JSExportTest::get, JSExportTest::set);
     }
 
-    v8::Local<v8::FunctionTemplate> get_class() const
-    {
-        return class_;
-    }
-
 private:
     const std::string class_name_;
     int age_ = 20;
