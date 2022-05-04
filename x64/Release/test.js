@@ -13,6 +13,8 @@ function test() {
     e.age = 42;
     log(e.age + ", updated.\n");
 
+    log("Object: " + e + "\n");
+
     return "Hello!" + (a + b + c);
 }
 

@@ -14,11 +14,6 @@
 #include "testclass.h"
 #include "bindtest.h"
 
-v8::Global<v8::FunctionTemplate> func_;
-v8::Global<v8::FunctionTemplate> js_func_;
-v8::Global<v8::Context> context_;
-v8::Global<v8::Function> process_;
-
 void ReadFile(const char* filePath, std::string& contents)
 {
     std::ifstream f(filePath);
@@ -51,8 +46,8 @@ int main(int argc, char* argv[])
     std::string fileContents;
     ReadFile(filePath, fileContents);
 
-    v8::V8::InitializeICUDefaultLocation(argv[0]);
-    v8::V8::InitializeExternalStartupData(argv[0]);
+    //v8::V8::InitializeICUDefaultLocation(argv[0]);
+    //v8::V8::InitializeExternalStartupData(argv[0]);
 
     std::cout << "----------------\n";
 
@@ -82,6 +77,7 @@ int main(int argc, char* argv[])
 
         // Bind a C++ class to V8 side.
         v8::Local<v8::FunctionTemplate> constructor = v8::FunctionTemplate::New(isolate, JSBindTest::construct);
+        constructor->SetClassName(v8::String::NewFromUtf8(isolate, "JSBindTest").ToLocalChecked());
         constructor->InstanceTemplate()->SetInternalFieldCount(1);
         constructor->InstanceTemplate()->SetAccessor(v8::String::NewFromUtf8(isolate, "age").ToLocalChecked(), JSBindTest::get, JSBindTest::set);
 
@@ -93,11 +89,6 @@ int main(int argc, char* argv[])
         v8::Context::Scope context_scope(context);
 
         {
-            //v8::Handle<v8::Object> a = greeter->Wrap(isolate);
-            //v8::Local<v8::Object> obj = v8::Local<v8::Object>::New(isolate, a);
-            //v8::Local<v8::Object> a = greeter->Wrap(isolate);
-            //global->Set(v8::String::NewFromUtf8(isolate, "Greeter").ToLocalChecked(), obj, v8::ReadOnly);
-
             // Create a string containing the JavaScript source code.
             v8::MaybeLocal<v8::String> m_source = v8::String::NewFromUtf8(isolate, fileContents.c_str());
             v8::Local<v8::String> source = m_source.ToLocalChecked();
@@ -112,8 +103,6 @@ int main(int argc, char* argv[])
             v8::String::Utf8Value utf8(isolate, result);
             printf("%s\n", *utf8);
         }
-
-        //delete greeter;
     }
 
     std::cout << "Initialized v8!!!!!!!!!!\n";

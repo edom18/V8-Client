@@ -39,14 +39,10 @@ public:
 
 private:
 
-    const std::string class_name_;
     int age_ = 20;
-    v8::Local<v8::FunctionTemplate> class_;
-    v8::Local<v8::ObjectTemplate> instance_tmpl_;
-    v8::Local<v8::ObjectTemplate> prototype_tmpl_;
-
     static void destruct(v8::Persistent<v8::Value> handle, void* parameter)
     {
+        std::cout << "In destructor";
         JSBindTest* instance = static_cast<JSBindTest*>(parameter);
         delete instance;
     }
