@@ -161,12 +161,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="v8api.cpp" />
     <ClCompile Include="v8client.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bindjs.h" />
     <ClInclude Include="bindtest.h" />
-    <ClInclude Include="testclass.h" />
+    <ClInclude Include="v8api.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

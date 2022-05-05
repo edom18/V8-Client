@@ -1,21 +1,24 @@
 function test() {
-    var a = 5;
-    var b = 15;
-    var c = 23.3;
+    return "test";
+    //var a = 5;
+    //var b = 15;
+    //var c = 23.3;
 
-    log("This is from JavaScript!!!\n");
+    //api.log("This is from JavaScript!!!\n");
 
-    log("-----------\n")
+    //api.log("-----------\n")
 
-    var e = new JSBindTest();
-    log(e.age + "\n");
+    //var e = new JSBindTest();
+    //api.log(e.age + "\n");
 
-    e.age = 42;
-    log(e.age + ", updated.\n");
+    //e.age = 42;
+    //api.log(e.age + ", updated.\n");
 
-    log("Object: " + e + "\n");
+    //api.log("Object: " + e + "\n");
 
-    return "Hello!" + (a + b + c);
+    //api.log(api);
+
+    //return "Hello!" + (a + b + c);
 }
 
 test();
