@@ -66,7 +66,7 @@ namespace v8_api
                 }
 
                 v8::String::Utf8Value resultStr(isolate_, result);
-                std::cout << *resultStr;
+                std::cout << *resultStr << std::endl;
             }
         }
     }
@@ -100,9 +100,10 @@ namespace v8_api
             pos_t->SetAccessor(prop_z, PositionInfo::Get, PositionInfo::Set);
 
             // Store a C++ instance.
-            PositionInfo* info = new PositionInfo();
+            info_ = new PositionInfo(1.0f, 2.0f, 3.0f);
+
             v8::Local<v8::Object> pos_o = pos_t->NewInstance(context).ToLocalChecked();
-            pos_o->SetInternalField(0, v8::External::New(isolate, info));
+            pos_o->SetInternalField(0, v8::External::New(isolate, info_));
 
             // Set the PositionInfo up to the API object.
             v8::Local<v8::Object> api_o = api_t->NewInstance(context).ToLocalChecked();
@@ -111,6 +112,11 @@ namespace v8_api
             // Set the API object up to the global object.
             context->Global()->Set(context, v8::String::NewFromUtf8(isolate, "api").ToLocalChecked(), api_o);
         }
+    }
+
+    PositionInfo& Context::GetInfo()
+    {
+        return *info_;
     }
 
     v8::Global<v8::Context>& Context::GetContext()

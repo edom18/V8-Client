@@ -1,11 +1,12 @@
 function update()
 {
+    api.position.z = 33.0;
     return "update";
 }
 
 function test() {
     api.position.x = 15;
-    return "test : " + api.position.x;
+    return "test : x=" + api.position.x + ", y=" + api.position.y + ", z=" + api.position.z;
     //var a = 5;
     //var b = 15;
     //var c = 23.3;

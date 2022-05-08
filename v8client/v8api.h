@@ -20,16 +20,6 @@ namespace v8_api
         void Run(const char* source_code, v8::Global<v8::Context>& context);
     };
 
-    class Context
-    {
-    private:
-        v8::Global<v8::Context> context_;
-
-    public:
-        Context(v8::Isolate* isolate);
-        v8::Global<v8::Context>& GetContext();
-    };
-
     class PositionInfo
     {
     private:
@@ -54,8 +44,6 @@ namespace v8_api
             int length = property_name->Utf8Length(args.GetIsolate()) + 1;
             char* buf = new char[length];
             property_name->WriteUtf8(args.GetIsolate(), buf, length);
-
-            std::cout << "getter prop: " << buf << std::endl;
 
             if (strcmp(buf, "x") == 0)
             {
@@ -83,8 +71,6 @@ namespace v8_api
             char* buf = new char[length];
             property_name->WriteUtf8(args.GetIsolate(), buf, length);
 
-            std::cout << "setter prop: " << buf << std::endl;
-
             if (strcmp(buf, "x") == 0)
             {
                 info->x_ = (float)value->NumberValue(args.GetIsolate()->GetCurrentContext()).ToChecked();
@@ -98,5 +84,19 @@ namespace v8_api
                 info->z_ = (float)value->NumberValue(args.GetIsolate()->GetCurrentContext()).ToChecked();
             }
         }
+    };
+
+    class Context
+    {
+    private:
+        v8::Global<v8::Context> context_;
+        PositionInfo* info_;
+
+    public:
+        Context(v8::Isolate* isolate);
+
+        PositionInfo& GetInfo();
+
+        v8::Global<v8::Context>& GetContext();
     };
 }
